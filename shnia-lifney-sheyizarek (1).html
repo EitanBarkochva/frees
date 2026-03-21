@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>שנייה לפני שייזרק ♻️</title>
+<!-- fix iOS iframe call links -->
+<meta name="format-detection" content="telephone=yes">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --green-light: #eafaf1;
+    --gray: #b2bec3;
+    --gray-light: #f0f2f5;
+    --gray-dark: #636e72;
+    --red: #e74c3c;
+    --orange: #f39c12;
+    --white: #ffffff;
+    --text: #2d3436;
+    --text-light: #636e72;
+    --card-shadow: 0 2px 12px rgba(0,0,0,0.09);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --bottom-bar: 68px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--gray-light);
+    color: var(--text);
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    background: var(--white);
+    padding: 14px 18px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+  }
+  .topbar-logo {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: var(--green-dark);
+    line-height: 1.1;
+  }
+  .topbar-logo span { color: var(--text); font-weight: 400; font-size: 0.72rem; display: block; }
+  .topbar-icon { font-size: 1.4rem; cursor: pointer; color: var(--text); opacity: 0.7; padding: 4px; }
+
+  /* ===== SEARCH ===== */
+  .search-bar {
+    background: var(--white);
+    padding: 10px 14px 14px;
+    display: flex;
+    gap: 8px;
+  }
+  .search-input-wrap {
+    flex: 1;
+    background: var(--gray-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .search-input-wrap input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    padding: 10px 0;
+    outline: none;
+    direction: rtl;
+  }
+  .search-input-wrap input::placeholder { color: var(--gray-dark); }
+  .filter-btn {
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0 14px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ===== FILTER CHIPS ===== */
+  .filter-chips {
+    padding: 0 14px 12px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--white);
+  }
+  .filter-chips::-webkit-scrollbar { display: none; }
+  .chip {
+    background: var(--gray-light);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-light);
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1.5px solid transparent;
+    transition: all .2s;
+  }
+  .chip.active { background: var(--green-light); color: var(--green-dark); border-color: var(--green); }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; padding-bottom: calc(var(--bottom-bar) + 16px); }
+  .screen.active { display: block; }
+
+  /* ===== FEED ===== */
+  .feed { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* ===== ITEM CARD ===== */
+  .item-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    cursor: pointer;
+    transition: transform .18s, box-shadow .18s;
+    display: flex;
+    gap: 0;
+  }
+  .item-card:active { transform: scale(0.98); }
+  .item-card-img {
+    width: 110px;
+    min-height: 110px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+  }
+  .item-card-body {
+    padding: 12px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .item-card-title { font-weight: 700; font-size: 1rem; color: var(--text); }
+  .item-card-meta { font-size: 0.82rem; color: var(--text-light); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .badge-available { background: var(--green-light); color: var(--green-dark); }
+  .badge-given { background: #f0f0f0; color: var(--gray-dark); }
+  .badge-thrown { background: #fff0ef; color: var(--red); }
+  .badge-new { background: #e8f4fd; color: #2980b9; }
+  .badge-good { background: #eafaf1; color: #27ae60; }
+  .badge-ok { background: #fef9e7; color: #f39c12; }
+  .item-card-date { font-size: 0.75rem; color: var(--gray); margin-top: auto; }
+
+  /* ===== FAB ===== */
+  .fab {
+    position: fixed;
+    bottom: calc(var(--bottom-bar) + 16px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    padding: 14px 28px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(46,204,113,0.45);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 90;
+    transition: background .2s, box-shadow .2s, transform .15s;
+    max-width: 400px;
+    white-space: nowrap;
+  }
+  .fab:active { transform: translateX(-50%) scale(0.96); }
+
+  /* ===== BOTTOM NAV ===== */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: var(--white);
+    border-top: 1px solid #eee;
+    display: flex;
+    z-index: 100;
+    height: var(--bottom-bar);
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    color: var(--gray-dark);
+    font-size: 0.7rem;
+    font-weight: 500;
+    transition: color .2s;
+    padding: 6px 0;
+  }
+  .nav-item .nav-icon { font-size: 1.45rem; line-height: 1; }
+  .nav-item.active { color: var(--green-dark); }
+
+  /* ===== FORM SCREEN ===== */
+  .form-screen { padding: 16px 14px; }
+  .form-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 18px; color: var(--text); }
+  .form-group { margin-bottom: 14px; }
+  .form-label { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 5px; display: block; }
+  .form-label .required { color: var(--red); margin-right: 2px; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: var(--white);
+    border: 1.5px solid #e0e0e0;
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s;
+    direction: rtl;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--green); }
+  .form-textarea { resize: vertical; min-height: 70px; }
+  .form-row { display: flex; gap: 10px; }
+  .form-row .form-group { flex: 1; }
+
+  /* Radio */
+  .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .radio-btn {
+    flex: 1;
+    min-width: 70px;
+    background: var(--gray-light);
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 9px 6px;
+    text-align: center;
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .18s;
+    color: var(--text-light);
+  }
+  .radio-btn.selected { background: var(--green-light); border-color: var(--green); color: var(--green-dark); }
+
+  /* Image upload */
+  .img-upload-area {
+    border: 2px dashed #c8d6c9;
+    border-radius: var(--radius);
+    padding: 22px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--gray-light);
+    color: var(--text-light);
+    transition: border-color .2s;
+  }
+  .img-upload-area:hover { border-color: var(--green); }
+  .img-upload-area .upload-icon { font-size: 2rem; margin-bottom: 6px; }
+  .img-upload-area p { font-size: 0.85rem; }
+  .img-upload-area input { display: none; }
+  .img-preview {
+    width: 100%;
+    border-radius: var(--radius);
+    object-fit: cover;
+    max-height: 200px;
+    margin-top: 10px;
+    display: none;
+  }
+
+  /* Form buttons */
+  .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-primary {
+    flex: 2;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .btn-primary:hover { background: var(--green-dark); }
+  .btn-secondary {
+    flex: 1;
+    background: var(--gray-light);
+    color: var(--text-light);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ===== DETAIL SCREEN ===== */
+  .detail-back {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 14px 0;
+    cursor: pointer;
+    color: var(--green-dark);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .detail-img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+    background: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    min-height: 200px;
+  }
+  .detail-body { padding: 16px 14px; }
+  .detail-title { font-size: 1.35rem; font-weight: 900; margin-bottom: 8px; }
+  .detail-badges { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .detail-info { background: var(--white); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; }
+  .detail-info-row { display: flex; gap: 8px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--gray-light); font-size: 0.9rem; }
+  .detail-info-row:last-child { border-bottom: none; }
+  .detail-info-row .icon { font-size: 1.1rem; width: 24px; text-align: center; }
+  .detail-info-row .label { color: var(--text-light); width: 80px; flex-shrink: 0; }
+  .detail-info-row .value { font-weight: 600; color: var(--text); }
+  .detail-actions { display: flex; gap: 10px; }
+  .btn-call {
+    flex: 1;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+  }
+  .btn-whatsapp {
+    flex: 1;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+  }
+
+  /* ===== MY ITEMS SCREEN ===== */
+  .my-items-screen { padding: 14px; }
+  .my-items-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .my-items-title { font-size: 1.2rem; font-weight: 900; }
+  .my-items-count { background: var(--green-light); color: var(--green-dark); border-radius: 20px; padding: 3px 12px; font-size: 0.82rem; font-weight: 700; }
+  .my-item-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: stretch;
+  }
+  .my-item-img {
+    width: 90px;
+    background: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+  .my-item-body { padding: 11px 12px; flex: 1; }
+  .my-item-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+  .my-item-meta { font-size: 0.78rem; color: var(--text-light); margin-bottom: 8px; }
+  .my-item-actions { display: flex; gap: 6px; }
+  .btn-small {
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .18s;
+  }
+  .btn-edit { background: var(--gray-light); color: var(--text); }
+  .btn-given { background: var(--green-light); color: var(--green-dark); }
+  .btn-delete { background: #fff0ef; color: var(--red); }
+
+  /* ===== STATUS SELECT ===== */
+  .status-menu {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: var(--white);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.15);
+    z-index: 200;
+    padding: 20px 18px;
+    display: none;
+  }
+  .status-menu.open { display: block; }
+  .status-menu-title { font-size: 1rem; font-weight: 700; margin-bottom: 14px; text-align: center; color: var(--text-light); }
+  .status-option {
+    padding: 13px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background .15s;
+  }
+  .status-option:hover { filter: brightness(0.97); }
+  .status-option.available { background: var(--green-light); color: var(--green-dark); }
+  .status-option.given { background: #f0f0f0; color: var(--gray-dark); }
+  .status-option.thrown { background: #fff0ef; color: var(--red); }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 199; display: none; }
+  .overlay.open { display: block; }
+
+  /* ===== FILTER PANEL ===== */
+  .filter-panel {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: var(--white);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.15);
+    z-index: 200;
+    padding: 20px 18px 30px;
+    display: none;
+  }
+  .filter-panel.open { display: block; }
+  .filter-panel-title { font-size: 1.1rem; font-weight: 900; margin-bottom: 16px; text-align: center; }
+  .filter-section-label { font-size: 0.88rem; font-weight: 700; color: var(--text-light); margin-bottom: 8px; margin-top: 14px; }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--text-light); }
+  .empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 12px; }
+  .empty-state p { font-size: 0.95rem; line-height: 1.5; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: var(--text);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    z-index: 300;
+    opacity: 0;
+    transition: opacity .25s, transform .25s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ===== SCROLL FIX ===== */
+  #screen-feed, #screen-my { overflow-y: auto; height: calc(100vh - 130px); }
+
+  .img-placeholder {
+    width: 110px;
+    min-height: 110px;
+    background: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+  }
+
+  .form-hint { font-size: 0.78rem; color: var(--text-light); margin-top: 4px; }
+
+  .detail-img-wrap {
+    width: 100%;
+    background: var(--gray-light);
+    min-height: 200px;
+    max-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    overflow: hidden;
+  }
+  .detail-img-wrap img { width: 100%; max-height: 280px; object-fit: cover; }
+
+  .my-item-img img { width: 90px; height: 90px; object-fit: cover; }
+
+  /* ===== MODAL ===== */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 500; display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--white); border-radius: 20px; padding: 28px 22px;
+    width: 100%; max-width: 380px; box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    animation: slideUp .25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(30px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+  .modal-icon { font-size: 2.8rem; text-align: center; margin-bottom: 10px; }
+  .modal-title { font-size: 1.2rem; font-weight: 900; text-align: center; margin-bottom: 6px; }
+  .modal-sub { font-size: 0.85rem; color: var(--text-light); text-align: center; margin-bottom: 20px; line-height: 1.5; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+
+  /* ===== LOGGED IN BADGE ===== */
+  .user-badge {
+    background: var(--green-light); color: var(--green-dark);
+    border-radius: 20px; padding: 4px 12px; font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; gap: 5px;
+  }
+
+  /* ===== UPDATE TOKEN SCREEN ===== */
+  .token-box {
+    background: var(--green-light); border-radius: var(--radius); padding: 16px;
+    margin-bottom: 14px; border: 1.5px solid var(--green);
+  }
+  .token-box p { font-size: 0.85rem; color: var(--green-dark); font-weight: 600; line-height: 1.5; }
+  .token-code {
+    font-size: 1.6rem; font-weight: 900; letter-spacing: 6px;
+    color: var(--green-dark); text-align: center; margin: 8px 0 4px;
+  }
+
+  /* ===== QUICK MARK GIVEN (from detail) ===== */
+  .btn-mark-given {
+    width: 100%; background: var(--green-light); color: var(--green-dark);
+    border: 2px solid var(--green); border-radius: var(--radius-sm);
+    padding: 13px; font-family: 'Heebo', sans-serif; font-size: 1rem;
+    font-weight: 700; cursor: pointer; margin-top: 10px; display: flex;
+    align-items: center; justify-content: center; gap: 6px;
+  }
+  .my-item-email { font-size: 0.72rem; color: var(--text-light); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">♻️ שנייה לפני שייזרק<span>תן חיים נוספים לחפץ שלך</span></div>
+  <div id="topbar-user">
+    <button onclick="openLoginModal()" style="background:var(--green-light);color:var(--green-dark);border:none;border-radius:20px;padding:6px 14px;font-family:'Heebo',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;">
+      כניסה / הרשמה
+    </button>
+  </div>
+</div>
+
+<!-- SEARCH + FILTERS (only on feed) -->
+<div id="search-area">
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <span>🔍</span>
+      <input type="text" id="search-input" placeholder="חפש חפץ..." oninput="filterItems()">
+    </div>
+    <button class="filter-btn" onclick="openFilter()">⚙️</button>
+  </div>
+  <div class="filter-chips" id="filter-chips">
+    <div class="chip active" onclick="setChip(this,'')">הכל</div>
+    <div class="chip" onclick="setChip(this,'ריהוט')">🛋️ ריהוט</div>
+    <div class="chip" onclick="setChip(this,'בגדים')">👕 בגדים</div>
+    <div class="chip" onclick="setChip(this,'חשמל')">🔌 חשמל</div>
+    <div class="chip" onclick="setChip(this,'ספרים')">📚 ספרים</div>
+    <div class="chip" onclick="setChip(this,'אחר')">📦 אחר</div>
+  </div>
+</div>
+
+<!-- ===== SCREEN: FEED ===== -->
+<div id="screen-feed" class="screen active">
+  <div class="feed" id="feed-list"></div>
+</div>
+
+<!-- ===== SCREEN: ADD ITEM ===== -->
+<div id="screen-add" class="screen">
+  <div class="form-screen">
+    <div class="form-title" id="form-title">➕ פרסם חפץ</div>
+
+    <div class="form-group">
+      <label class="form-label">שם החפץ <span class="required">*</span></label>
+      <input class="form-input" id="f-name" type="text" placeholder="לדוגמה: כיסא משרדי">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">סוג חפץ <span class="required">*</span></label>
+        <select class="form-select" id="f-category">
+          <option value="">בחר...</option>
+          <option value="ריהוט">🛋️ ריהוט</option>
+          <option value="בגדים">👕 בגדים</option>
+          <option value="חשמל">🔌 חשמל</option>
+          <option value="ספרים">📚 ספרים</option>
+          <option value="אחר">📦 אחר</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">עיר <span class="required">*</span></label>
+        <input class="form-input" id="f-city" type="text" placeholder="תל אביב">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">רחוב</label>
+        <input class="form-input" id="f-street" type="text" placeholder="שם רחוב">
+      </div>
+      <div class="form-group">
+        <label class="form-label">מספר בית</label>
+        <input class="form-input" id="f-house" type="text" placeholder="12">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">טלפון ליצירת קשר <span class="required">*</span></label>
+      <input class="form-input" id="f-phone" type="tel" placeholder="050-0000000">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">מצב החפץ</label>
+      <div class="radio-group">
+        <div class="radio-btn selected" onclick="selectRadio(this,'condition')">חדש</div>
+        <div class="radio-btn" onclick="selectRadio(this,'condition')">כמו חדש</div>
+        <div class="radio-btn" onclick="selectRadio(this,'condition')">טוב</div>
+        <div class="radio-btn" onclick="selectRadio(this,'condition')">סביר</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">תמונה</label>
+      <div class="img-upload-area" onclick="document.getElementById('f-image').click()">
+        <div class="upload-icon">📷</div>
+        <p>צלם או העלה תמונה</p>
+        <input type="file" id="f-image" accept="image/*" capture="environment" onchange="previewImage(event)">
+      </div>
+      <img id="f-img-preview" class="img-preview" src="" alt="תצוגה מקדימה">
+    </div>
+
+    <div class="form-group" id="status-group" style="display:none">
+      <label class="form-label">סטטוס</label>
+      <div class="radio-group">
+        <div class="radio-btn selected" onclick="selectRadio(this,'status')">זמין ✅</div>
+        <div class="radio-btn" onclick="selectRadio(this,'status')">נמסר 🤝</div>
+        <div class="radio-btn" onclick="selectRadio(this,'status')">נזרק 🗑️</div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-primary" onclick="saveItem()">💾 שמור</button>
+      <button class="btn-secondary" onclick="cancelForm()">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN: DETAIL ===== -->
+<div id="screen-detail" class="screen">
+  <div class="detail-back" onclick="showScreen('feed')">← חזרה לרשימה</div>
+  <div id="detail-content"></div>
+</div>
+
+<!-- ===== SCREEN: MY ITEMS ===== -->
+<div id="screen-my" class="screen">
+  <div class="my-items-screen">
+    <div class="my-items-header">
+      <div class="my-items-title">📋 המודעות שלי</div>
+      <div class="my-items-count" id="my-count">0 חפצים</div>
+    </div>
+    <div id="my-list"></div>
+  </div>
+</div>
+
+<!-- FAB -->
+<button class="fab" id="fab-btn" onclick="showAdd()">
+  ＋ הוסף חפץ
+</button>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" id="nav-feed" onclick="showScreen('feed')">
+    <span class="nav-icon">🏠</span>חפצים
+  </div>
+  <div class="nav-item" id="nav-add" onclick="showAdd()">
+    <span class="nav-icon">➕</span>פרסם
+  </div>
+  <div class="nav-item" id="nav-my" onclick="showScreen('my')">
+    <span class="nav-icon">👤</span>שלי
+  </div>
+</div>
+
+<!-- STATUS MENU -->
+<div class="overlay" id="overlay" onclick="closeStatusMenu()"></div>
+<div class="status-menu" id="status-menu">
+  <div class="status-menu-title">שנה סטטוס</div>
+  <div class="status-option available" onclick="changeStatus('available')">✅ זמין</div>
+  <div class="status-option given" onclick="changeStatus('given')">🤝 נמסר</div>
+  <div class="status-option thrown" onclick="changeStatus('thrown')">🗑️ נזרק</div>
+</div>
+
+<!-- FILTER PANEL -->
+<div class="filter-panel" id="filter-panel">
+  <div class="filter-panel-title">⚙️ סינון חפצים</div>
+
+  <div class="filter-section-label">עיר</div>
+  <input class="form-input" id="filter-city" type="text" placeholder="הכנס עיר...">
+
+  <div class="filter-section-label">סטטוס</div>
+  <div class="radio-group">
+    <div class="radio-btn selected" onclick="selectRadio(this,'fstatus')">הכל</div>
+    <div class="radio-btn" onclick="selectRadio(this,'fstatus')">זמין בלבד</div>
+  </div>
+
+  <div class="filter-section-label">מצב החפץ</div>
+  <div class="radio-group">
+    <div class="radio-btn selected" onclick="selectRadio(this,'fcond')">הכל</div>
+    <div class="radio-btn" onclick="selectRadio(this,'fcond')">חדש</div>
+    <div class="radio-btn" onclick="selectRadio(this,'fcond')">טוב</div>
+    <div class="radio-btn" onclick="selectRadio(this,'fcond')">סביר</div>
+  </div>
+
+  <div class="form-actions" style="margin-top:18px">
+    <button class="btn-primary" onclick="applyFilter()">החל סינון</button>
+    <button class="btn-secondary" onclick="clearFilter()">נקה</button>
+  </div>
+</div>
+
+<!-- REGISTRATION / LOGIN MODAL -->
+<div class="modal-backdrop" id="login-modal">
+  <div class="modal">
+    <div class="modal-icon">👤</div>
+    <div class="modal-title" id="auth-title">הרשמה / כניסה</div>
+    <div class="modal-sub" id="auth-sub">הכנס אימייל כדי לפרסם חפצים ולעדכן סטטוס בקלות</div>
+
+    <div id="auth-step-email">
+      <div class="form-group">
+        <label class="form-label">אימייל</label>
+        <input class="form-input" id="auth-email" type="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">שם (אופציונלי)</label>
+        <input class="form-input" id="auth-name" type="text" placeholder="השם שיוצג">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="doRegister()">המשך ✓</button>
+        <button class="btn-secondary" onclick="closeLoginModal()">ביטול</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPDATE-BY-EMAIL MODAL (for marking item as given from detail) -->
+<div class="modal-backdrop" id="update-modal">
+  <div class="modal">
+    <div class="modal-icon">🔑</div>
+    <div class="modal-title">עדכון סטטוס</div>
+    <div class="modal-sub">הכנס את האימייל שרשמת כדי לעדכן את החפץ</div>
+    <div class="form-group">
+      <input class="form-input" id="update-email" type="email" placeholder="האימייל שלך">
+    </div>
+    <div id="update-error" style="color:var(--red);font-size:0.82rem;margin-top:-8px;margin-bottom:8px;display:none">האימייל לא תואם למפרסם</div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="confirmUpdateStatus()">עדכן כנמסר 🤝</button>
+      <button class="btn-secondary" onclick="closeUpdateModal()">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+const CATEGORY_ICONS = { ריהוט:'🛋️', בגדים:'👕', חשמל:'🔌', ספרים:'📚', אחר:'📦' };
+
+let items = JSON.parse(localStorage.getItem('items') || 'null') || [
+  { id:1, name:'כיסא משרדי', phone:'052-1234567', city:'תל אביב', street:'דיזנגוף', house:'45', category:'ריהוט', condition:'טוב', status:'available', image:null, email:'', ownerName:'', created: Date.now()-3600000*5 },
+  { id:2, name:'מקרר נורמנדי', phone:'054-9876543', city:'חיפה', street:'הנמל', house:'12', category:'חשמל', condition:'סביר', status:'available', image:null, email:'', ownerName:'', created: Date.now()-3600000*2 },
+  { id:3, name:'ספרי ילדים (10 כרכים)', phone:'050-1111111', city:'ירושלים', street:'יפו', house:'88', category:'ספרים', condition:'כמו חדש', status:'available', image:null, email:'', ownerName:'', created: Date.now()-3600000*10 },
+  { id:4, name:'שולחן אוכל', phone:'053-2222222', city:'ראשון לציון', street:'הרצל', house:'5', category:'ריהוט', condition:'טוב', status:'given', image:null, email:'', ownerName:'', created: Date.now()-86400000 },
+];
+
+let nextId = Math.max(...items.map(i=>i.id)) + 1;
+let currentFilter = { category:'', city:'', statusOnly: false, condition:'' };
+let editingId = null;
+let statusTargetId = null;
+let updateTargetId = null;
+
+// ===== AUTH =====
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+
+function updateTopbar() {
+  const el = document.getElementById('topbar-user');
+  if (currentUser) {
+    el.innerHTML = `<div class="user-badge" onclick="logoutConfirm()">👤 ${currentUser.name || currentUser.email.split('@')[0]} ↩</div>`;
+  } else {
+    el.innerHTML = `<button onclick="openLoginModal()" style="background:var(--green-light);color:var(--green-dark);border:none;border-radius:20px;padding:6px 14px;font-family:'Heebo',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;">כניסה / הרשמה</button>`;
+  }
+}
+
+function openLoginModal() {
+  document.getElementById('auth-email').value = currentUser ? currentUser.email : '';
+  document.getElementById('auth-name').value = currentUser ? (currentUser.name||'') : '';
+  document.getElementById('login-modal').classList.add('open');
+}
+function closeLoginModal() { document.getElementById('login-modal').classList.remove('open'); }
+
+function doRegister() {
+  const email = document.getElementById('auth-email').value.trim().toLowerCase();
+  const name = document.getElementById('auth-name').value.trim();
+  if (!email || !email.includes('@')) { showToast('⚠️ נא להכניס אימייל תקין'); return; }
+  currentUser = { email, name };
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  closeLoginModal();
+  updateTopbar();
+  showToast(`👋 ברוך הבא${name ? ', '+name : ''}!`);
+}
+
+function logoutConfirm() {
+  if (confirm('להתנתק?')) {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    updateTopbar();
+    showToast('👋 התנתקת בהצלחה');
+  }
+}
+
+// ===== UPDATE BY EMAIL (from detail) =====
+function openUpdateModal(id) {
+  updateTargetId = id;
+  document.getElementById('update-email').value = currentUser ? currentUser.email : '';
+  document.getElementById('update-error').style.display = 'none';
+  document.getElementById('update-modal').classList.add('open');
+}
+function closeUpdateModal() { document.getElementById('update-modal').classList.remove('open'); }
+function confirmUpdateStatus() {
+  const email = document.getElementById('update-email').value.trim().toLowerCase();
+  const item = items.find(i => i.id === updateTargetId);
+  if (!item) { closeUpdateModal(); return; }
+  // Allow if: item has no email (demo items), or email matches
+  if (item.email && item.email !== email) {
+    document.getElementById('update-error').style.display = 'block';
+    return;
+  }
+  item.status = 'given';
+  saveData();
+  closeUpdateModal();
+  showToast('🤝 החפץ סומן כנמסר!');
+  showDetail(updateTargetId);
+}
+
+function saveData() { localStorage.setItem('items', JSON.stringify(items)); }
+
+// ===== SCREENS =====
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('search-area').style.display = name === 'feed' ? '' : 'none';
+  document.getElementById('fab-btn').style.display = (name === 'feed' || name === 'my') ? 'flex' : 'none';
+  document.getElementById('screen-' + name).classList.add('active');
+  if (name === 'feed') { document.getElementById('nav-feed').classList.add('active'); renderFeed(); }
+  if (name === 'my') { document.getElementById('nav-my').classList.add('active'); renderMy(); }
+  if (name === 'add') document.getElementById('nav-add').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showAdd(editId) {
+  if (!currentUser && !editId) { openLoginModal(); showToast('נא להתחבר תחילה'); return; }
+  editingId = editId || null;
+  document.getElementById('status-group').style.display = editId ? 'block' : 'none';
+  document.getElementById('form-title').textContent = editId ? '✏️ ערוך חפץ' : '➕ פרסם חפץ';
+  // Reset
+  ['f-name','f-city','f-street','f-house','f-phone'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-category').value = '';
+  document.getElementById('f-img-preview').style.display = 'none';
+  document.querySelectorAll('.radio-btn').forEach((b,i) => { if(b.dataset.group === 'condition') b.classList.remove('selected'); });
+  document.querySelectorAll('[onclick*="condition"]').forEach((b,i) => b.classList.toggle('selected', i===0));
+  document.querySelectorAll('[onclick*="status"]').forEach((b,i) => b.classList.toggle('selected', i===0));
+
+  if (editId) {
+    const item = items.find(i => i.id === editId);
+    if (item) {
+      document.getElementById('f-name').value = item.name;
+      document.getElementById('f-city').value = item.city;
+      document.getElementById('f-street').value = item.street || '';
+      document.getElementById('f-house').value = item.house || '';
+      document.getElementById('f-phone').value = item.phone;
+      document.getElementById('f-category').value = item.category;
+      if (item.image) { document.getElementById('f-img-preview').src = item.image; document.getElementById('f-img-preview').style.display = 'block'; }
+      document.querySelectorAll('[onclick*="condition"]').forEach(b => { b.classList.toggle('selected', b.textContent === item.condition); });
+      const statusMap = { available:'זמין ✅', given:'נמסר 🤝', thrown:'נזרק 🗑️' };
+      document.querySelectorAll('[onclick*="status"]').forEach(b => { b.classList.toggle('selected', b.textContent === statusMap[item.status]); });
+    }
+  }
+  showScreen('add');
+}
+
+function cancelForm() { showScreen(editingId ? 'my' : 'feed'); editingId = null; }
+
+// ===== FORM =====
+function selectRadio(el, group) {
+  document.querySelectorAll(`[onclick*="'${group}'"]`).forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function getSelected(group) {
+  const el = document.querySelector(`[onclick*="'${group}'"].selected`);
+  return el ? el.textContent : '';
+}
+
+function previewImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { const p = document.getElementById('f-img-preview'); p.src = ev.target.result; p.style.display = 'block'; };
+  reader.readAsDataURL(file);
+}
+
+function saveItem() {
+  const name = document.getElementById('f-name').value.trim();
+  const city = document.getElementById('f-city').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const category = document.getElementById('f-category').value;
+  if (!name || !city || !phone || !category) { showToast('⚠️ נא למלא שם, עיר, טלפון וסוג'); return; }
+
+  const conditionText = getSelected('condition').replace(/[✅🤝🗑️]/g,'').trim() || 'טוב';
+  const statusText = getSelected('status');
+  const statusMap = { 'זמין ✅': 'available', 'נמסר 🤝': 'given', 'נזרק 🗑️': 'thrown' };
+  const status = statusMap[statusText] || 'available';
+  const imgEl = document.getElementById('f-img-preview');
+  const image = imgEl.style.display !== 'none' ? imgEl.src : null;
+
+  if (editingId) {
+    const item = items.find(i => i.id === editingId);
+    if (item) {
+      item.name = name; item.city = city; item.phone = phone; item.category = category;
+      item.street = document.getElementById('f-street').value.trim();
+      item.house = document.getElementById('f-house').value.trim();
+      item.condition = conditionText; item.status = status;
+      if (image) item.image = image;
+    }
+    showToast('✅ המודעה עודכנה!');
+    saveData(); showScreen('my');
+  } else {
+    items.unshift({ id: nextId++, name, city, phone, category,
+      street: document.getElementById('f-street').value.trim(),
+      house: document.getElementById('f-house').value.trim(),
+      condition: conditionText, status: 'available', image, created: Date.now(),
+      email: currentUser ? currentUser.email : '',
+      ownerName: currentUser ? (currentUser.name || '') : '' });
+    showToast('🎉 החפץ פורסם בהצלחה!');
+    saveData(); showScreen('feed');
+  }
+}
+
+// ===== FEED =====
+let activeCategory = '';
+function setChip(el, cat) {
+  document.querySelectorAll('#filter-chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  activeCategory = cat;
+  filterItems();
+}
+
+function filterItems() {
+  renderFeed();
+}
+
+function renderFeed() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  let filtered = items.filter(item => {
+    if (activeCategory && item.category !== activeCategory) return false;
+    if (q && !item.name.toLowerCase().includes(q) && !item.city.includes(q)) return false;
+    if (currentFilter.city && !item.city.includes(currentFilter.city)) return false;
+    if (currentFilter.statusOnly && item.status !== 'available') return false;
+    if (currentFilter.condition && currentFilter.condition !== 'הכל' && item.condition !== currentFilter.condition) return false;
+    return true;
+  });
+
+  const list = document.getElementById('feed-list');
+  if (!filtered.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">🕵️</div><p>לא נמצאו חפצים<br>נסה לשנות את הסינון</p></div>'; return; }
+
+  list.innerHTML = filtered.map(item => `
+    <div class="item-card" onclick="showDetail(${item.id})">
+      ${item.image
+        ? `<img src="${item.image}" class="item-card-img" style="object-fit:cover;width:110px;min-height:110px;" alt="${item.name}">`
+        : `<div class="img-placeholder">${CATEGORY_ICONS[item.category]||'📦'}</div>`}
+      <div class="item-card-body">
+        <div class="item-card-title">${item.name}</div>
+        <div class="item-card-meta">
+          <span>📍 ${item.city}</span>
+          <span class="badge ${condBadge(item.condition)}">${item.condition}</span>
+          <span class="badge ${statusBadge(item.status)}">${statusLabel(item.status)}</span>
+        </div>
+        <div class="item-card-date">${timeAgo(item.created)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== DETAIL =====
+function showDetail(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  const addr = [item.street, item.house].filter(Boolean).join(' ');
+  const waMsg = encodeURIComponent(`שלום, ראיתי את המודעה שלך באפליקציה "שנייה לפני שייזרק" על: ${item.name}. אשמח לקבל אותו!`);
+
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-img-wrap">
+      ${item.image ? `<img src="${item.image}" alt="${item.name}">` : `<span style="font-size:5rem">${CATEGORY_ICONS[item.category]||'📦'}</span>`}
+    </div>
+    <div class="detail-body">
+      <div class="detail-title">${item.name}</div>
+      <div class="detail-badges">
+        <span class="badge ${statusBadge(item.status)}">${statusLabel(item.status)}</span>
+        <span class="badge ${condBadge(item.condition)}">${item.condition}</span>
+        <span class="badge" style="background:#f0f0f0;color:#555">${item.category}</span>
+      </div>
+      <div class="detail-info">
+        <div class="detail-info-row"><span class="icon">📍</span><span class="label">עיר</span><span class="value">${item.city}</span></div>
+        ${addr ? `<div class="detail-info-row"><span class="icon">🏠</span><span class="label">כתובת</span><span class="value">${addr}</span></div>` : ''}
+        <div class="detail-info-row"><span class="icon">📦</span><span class="label">קטגוריה</span><span class="value">${item.category}</span></div>
+        <div class="detail-info-row"><span class="icon">🕐</span><span class="label">פורסם</span><span class="value">${timeAgo(item.created)}</span></div>
+      </div>
+      ${item.status === 'available' ? `
+      <div class="detail-actions">
+        <button class="btn-call" onclick="window.location.href='tel:${item.phone}'">📞 התקשר</button>
+        <button class="btn-whatsapp" onclick="window.open('https://wa.me/972${item.phone.replace(/^0/,'').replace(/-/g,'')}?text=${waMsg}','_blank')">💬 WhatsApp</button>
+      </div>
+      <button class="btn-mark-given" onclick="openUpdateModal(${item.id})">🤝 סמן כנמסר</button>
+      ` : `<div style="text-align:center;padding:14px;color:var(--gray-dark);font-weight:600">החפץ כבר ${statusLabel(item.status)}</div>`}
+    </div>
+  `;
+  showScreen('detail');
+  document.getElementById('fab-btn').style.display = 'none';
+  document.getElementById('search-area').style.display = 'none';
+}
+
+// ===== MY ITEMS =====
+function renderMy() {
+  const mine = currentUser
+    ? items.filter(i => i.email === currentUser.email)
+    : items; // show all if not logged in (demo)
+  document.getElementById('my-count').textContent = mine.length + ' חפצים';
+  const list = document.getElementById('my-list');
+  if (!mine.length) { list.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>עדיין לא פרסמת חפצים<br>לחץ "+ הוסף חפץ" להתחיל!</p></div>'; return; }
+  list.innerHTML = mine.map(item => `
+    <div class="my-item-card">
+      <div class="my-item-img">
+        ${item.image ? `<img src="${item.image}" alt="${item.name}">` : CATEGORY_ICONS[item.category]||'📦'}
+      </div>
+      <div class="my-item-body">
+        <div class="my-item-title">${item.name}</div>
+        <div class="my-item-meta">📍 ${item.city} · <span class="badge ${statusBadge(item.status)}" style="font-size:0.72rem">${statusLabel(item.status)}</span></div>
+        ${item.email ? `<div class="my-item-email">✉️ ${item.email}</div>` : ''}
+        <div class="my-item-actions">
+          <button class="btn-small btn-edit" onclick="showAdd(${item.id})">✏️ ערוך</button>
+          <button class="btn-small btn-given" onclick="openStatusMenu(${item.id})">🔄 סטטוס</button>
+          <button class="btn-small btn-delete" onclick="deleteItem(${item.id})">🗑️</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteItem(id) {
+  if (!confirm('למחוק את המודעה?')) return;
+  items = items.filter(i => i.id !== id);
+  saveData(); renderMy();
+  showToast('🗑️ המודעה נמחקה');
+}
+
+// ===== STATUS MENU =====
+function openStatusMenu(id) { statusTargetId = id; document.getElementById('status-menu').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
+function closeStatusMenu() { document.getElementById('status-menu').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+function changeStatus(status) {
+  const item = items.find(i => i.id === statusTargetId);
+  if (item) { item.status = status; saveData(); renderMy(); showToast('✅ הסטטוס עודכן'); }
+  closeStatusMenu();
+}
+
+// ===== FILTER =====
+function openFilter() { document.getElementById('filter-panel').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
+function applyFilter() {
+  currentFilter.city = document.getElementById('filter-city').value.trim();
+  const statusSel = document.querySelector('[onclick*="fstatus"].selected');
+  currentFilter.statusOnly = statusSel && statusSel.textContent === 'זמין בלבד';
+  const condSel = document.querySelector('[onclick*="fcond"].selected');
+  currentFilter.condition = condSel ? condSel.textContent : '';
+  document.getElementById('filter-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  filterItems();
+  showToast('✅ סינון הוחל');
+}
+function clearFilter() {
+  currentFilter = { category:'', city:'', statusOnly: false, condition:'' };
+  document.getElementById('filter-city').value = '';
+  document.querySelectorAll('[onclick*="fstatus"]').forEach((b,i) => b.classList.toggle('selected', i===0));
+  document.querySelectorAll('[onclick*="fcond"]').forEach((b,i) => b.classList.toggle('selected', i===0));
+  document.getElementById('filter-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  filterItems();
+}
+
+// Make overlay close both menus
+document.getElementById('overlay').addEventListener('click', () => {
+  closeStatusMenu();
+  document.getElementById('filter-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+});
+
+// ===== HELPERS =====
+function statusBadge(s) { return s === 'available' ? 'badge-available' : s === 'given' ? 'badge-given' : 'badge-thrown'; }
+function statusLabel(s) { return s === 'available' ? 'זמין ✅' : s === 'given' ? 'נמסר 🤝' : 'נזרק 🗑️'; }
+function condBadge(c) { return c === 'חדש' || c === 'כמו חדש' ? 'badge-new' : c === 'טוב' ? 'badge-good' : 'badge-ok'; }
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  const h = Math.floor(diff/3600000);
+  const d = Math.floor(diff/86400000);
+  if (d > 0) return `לפני ${d} ימים`;
+  if (h > 0) return `לפני ${h} שעות`;
+  return 'עכשיו';
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ===== INIT =====
+updateTopbar();
+renderFeed();
+</script>
+</body>
+</html>
